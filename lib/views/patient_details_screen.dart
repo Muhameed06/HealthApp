@@ -1,66 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_app/controllers/upload_controller.dart';
 import 'package:intl/intl.dart';
 
 class PatientDetailsScreen extends StatelessWidget {
-  const PatientDetailsScreen({super.key});
+  final String uploadId;
 
-  List<Map<String, dynamic>> getPatientData() {
-    return [
-      {
-        'heartRate': 72,
-        'steps': 5000,
-        'timestamp': DateTime.now().subtract(const Duration(days: 1)),
-      },
-      {
-        'heartRate': 85,
-        'steps': 7000,
-        'timestamp': DateTime.now().subtract(const Duration(days: 2)),
-      },
-      {
-        'heartRate': 90,
-        'steps': 6500,
-        'timestamp': DateTime.now().subtract(const Duration(days: 3)),
-      },
-      {
-        'heartRate': 78,
-        'steps': 8000,
-        'timestamp': DateTime.now().subtract(const Duration(days: 4)),
-      },
-      {
-        'heartRate': 60,
-        'steps': 3000,
-        'timestamp': DateTime.now().subtract(const Duration(days: 5)),
-      },
-    ];
-  }
+  PatientDetailsScreen(this.uploadId, {super.key});
+
+  final UploadController _uploadController = Get.find<UploadController>();
 
   @override
   Widget build(BuildContext context) {
-    final patientData = getPatientData();
+    _uploadController.fetchPatientDetails(uploadId);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Patient Details'),
-      ),
-      body: patientData.isEmpty
-          ? const Center(child: Text('No data found for this patient!'))
-          : ListView.builder(
-              itemCount: patientData.length,
-              itemBuilder: (context, index) {
-                final dataPoint = patientData[index];
+      appBar: AppBar(title: const Text('Upload Details')),
+      body: Obx(() {
+        if (_uploadController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator(color: Colors.red,));
+        }
 
-                // Formatting date
-                final formattedDate = DateFormat('yyyy-MM-dd – kk:mm')
-                    .format(dataPoint['timestamp']);
+        if (_uploadController.uploadDetails.isEmpty) {
+          return const Center(child: Text('No data found.'));
+        }
 
-                return ListTile(
-                  leading: const Icon(Icons.favorite, color: Colors.red),
-                  title: Text('Heart Rate: ${dataPoint['heartRate']} bpm'),
-                  subtitle: Text('Steps: ${dataPoint['steps']}'),
-                  trailing: Text(formattedDate),
-                );
-              },
-            ),
+        final dataPoints = _uploadController.uploadDetails;
+
+        return ListView.builder(
+          itemCount: dataPoints.length,
+          itemBuilder: (context, index) {
+            final dataPoint = dataPoints[index];
+            final formattedDate = DateFormat('yyyy-MM-dd – kk:mm')
+                .format(DateTime.parse(dataPoint['timestamp']));
+
+            return ListTile(
+              leading: const Icon(
+                Icons.favorite,
+                color: Colors.red,
+              ),
+              title: Text('Heart Rate: ${dataPoint['heart_rate']} bpm'),
+              subtitle: Text('Steps: ${dataPoint['steps']}'),
+              trailing: Text('Date: $formattedDate'),
+            );
+          },
+        );
+      }),
     );
   }
 }

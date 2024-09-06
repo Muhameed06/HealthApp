@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:health_app/views/patient_details_screen.dart';
-import 'package:health_app/views/patients_screen.dart';
+import 'package:get/get.dart';
+import 'package:health_app/dependencies/init_dependencies.dart';
 import 'package:health_app/views/upload_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initDependecies();
   runApp(const MyApp());
 }
 
@@ -12,11 +14,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Health App',
       home: Scaffold(
-        body: PatientDetailsScreen(),
+        body: UploadScreen(),
       ),
     );
   }
