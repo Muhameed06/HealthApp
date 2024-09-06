@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_app/views/patients_screen.dart';
 import 'package:health_app/views/upload_screen.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Health App',
       home: Scaffold(
-        body: UploadScreen(),
+        body: PatientsScreen(),
       ),
     );
   }
