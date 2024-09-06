@@ -22,7 +22,7 @@ class UploadController extends GetxController {
   Future<void> uploadData(List<UserHealthModel> data) async {
     String uploadId = uuid.v4();
     String userId = "User_${Random().nextInt(1000)}";
-
+    
     isUploading.value = true;
     progress.value = 0.0;
 

@@ -34,24 +34,36 @@ class UploadScreen extends StatelessWidget {
                     animation: true,
                     animateFromLastPercent: true,
                   )),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               SizedBox(
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _uploadController.isUploading.value
-                      ? null
-                      : () => _uploadController.uploadData(mockData),
-                  child: const Text('Start Upload', style: TextStyle(color: Colors.black, fontSize: 16),),
+                  onPressed: () {
+                    if (_uploadController.isUploading.value) {                    
+                      return;
+                    } else {
+                      _uploadController.uploadData(mockData);
+                    }
+                  },
+                  child: const Text(
+                    'Start Upload',
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               SizedBox(
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () => Get.to(() => PatientsScreen()),
-                  child: const Text('View Uploads', style: TextStyle(color: Colors.black, fontSize: 16)),
+                  child: const Text('View Uploads',
+                      style: TextStyle(color: Colors.black, fontSize: 16)),
                 ),
               ),
             ],
